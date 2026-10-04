@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Student Voice Mood & Study Assistant - AI-powered student emotional wellness and personalized study recommendation platform. Analyze voice or text mood and boost academic performance.">
+  <meta name="keywords" content="AI study assistant, student mood analysis, voice sentiment detection, academic wellness, pomodoro timer, study planner">
+  <meta name="author" content="MindStudy AI">
+  <meta name="theme-color" content="#0d0f1a">
+  <title>Student Voice Mood & Study Assistant | AI-Powered Academic Wellness</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas Background for Star/Particle Field -->
+  <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo" id="brandLogo">
+        <div class="logo-icon-wrap">
+          <span class="logo-orb"></span>
+          <i class="fa-solid fa-brain-circuit logo-icon"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">MindStudy<span class="accent-text">.AI</span></span>
+          <span class="logo-subtitle">Voice Mood & Study Assistant</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <a href="#hero" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#voiceSection" class="nav-link"><i class="fa-solid fa-microphone-lines"></i> Voice AI</a>
+        <a href="#textSection" class="nav-link"><i class="fa-solid fa-pen-fancy"></i> Text AI</a>
+        <a href="#chatbotSection" class="nav-link"><i class="fa-solid fa-robot"></i> AI Chat</a>
+        <a href="#dashboardSection" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a href="#timerSection" class="nav-link"><i class="fa-solid fa-clock"></i> Pomodoro</a>
+        <a href="#breathingSection" class="nav-link"><i class="fa-solid fa-wind"></i> Breathe</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="current-mood-badge" id="navMoodBadge" title="Current Detected Mood">
+          <span class="badge-dot"></span>
+          <span class="badge-emoji" id="navMoodEmoji">⚡</span>
+          <span class="badge-text" id="navMoodText">Ready</span>
+        </div>
+        <button id="ambientSoundToggle" class="btn-icon" title="Toggle Focus Soundscape" aria-label="Toggle ambient focus audio">
+          <i class="fa-solid fa-headphones"></i>
+        </button>
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero-section" id="hero">
+      <div class="hero-glow-blob blob-1"></div>
+      <div class="hero-glow-blob blob-2"></div>
+
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-sparkle"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+            <span>Next-Gen Neural Emotion & Study Optimization</span>
+          </div>
+          
+          <h1 class="hero-title">
+            Student Voice Mood & <span class="gradient-text">Study Assistant</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            “Understand your mood. Improve your study. Let AI guide you.”
+          </p>
+
+          <p class="hero-tagline">
+            <i class="fa-solid fa-quote-left"></i> Your mood. Your voice. Your study journey. <i class="fa-solid fa-quote-right"></i>
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#voiceSection" class="btn btn-primary" id="heroVoiceBtn">
+              <span class="btn-icon-left"><i class="fa-solid fa-microphone-waveform"></i></span>
+              <span>Analyze My Voice</span>
+              <span class="btn-glow"></span>
+            </a>
+            <a href="#textSection" class="btn btn-secondary" id="heroTextBtn">
+              <span class="btn-icon-left"><i class="fa-solid fa-pen-nib"></i></span>
+              <span>Analyze My Text</span>
+            </a>
+          </div>
+
+          <!-- Feature Highlights Bar -->
+          <div class="hero-stats">
+            <div class="stat-card">
+              <span class="stat-icon"><i class="fa-solid fa-wave-square"></i></span>
+              <div class="stat-info">
+                <strong>Real-Time Speech</strong>
+                <small>Acoustic & Sentiment</small>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon"><i class="fa-solid fa-heart-pulse"></i></span>
+              <div class="stat-info">
+                <strong>8 Emotional Spectra</strong>
+                <small>Confidence Scored</small>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon"><i class="fa-solid fa-book-open-reader"></i></span>
+              <div class="stat-info">
+                <strong>Adaptive Strategies</strong>
+                <small>Tailored Study Tasks</small>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon"><i class="fa-solid fa-shield-halved"></i></span>
+              <div class="stat-info">
+                <strong>100% Private</strong>
+                <small>Browser-Side AI</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Assistant Animated Avatar & Orb -->
+        <div class="hero-visual">
+          <div class="orb-container">
+            <canvas id="neuralOrbCanvas" class="neural-orb-canvas" width="380" height="380"></canvas>
+            
+            <div class="orb-center-avatar">
+              <div class="avatar-ring ring-1"></div>
+              <div class="avatar-ring ring-2"></div>
+              <div class="avatar-core">
+                <i class="fa-solid fa-brain" id="orbBrainIcon"></i>
+              </div>
+            </div>
+
+            <div class="floating-pill pill-top" id="pillTop">
+              <i class="fa-solid fa-chart-simple"></i>
+              <span>Live Neural NLP Engine</span>
+            </div>
+
+            <div class="floating-pill pill-bottom" id="pillBottom">
+              <span id="pillMoodEmoji">✨</span>
+              <span id="pillMoodText">AI Active & Listening</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VOICE ANALYSIS SECTION ==================== -->
+    <section class="section" id="voiceSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-microphone-lines"></i> Speech & Acoustic Analysis</div>
+        <h2 class="section-title">Voice Emotion Analysis</h2>
+        <p class="section-desc">Speak into your microphone naturally. Our AI extracts speech sentiment and acoustic patterns to estimate your current emotional state.</p>
+      </div>
+
+      <div class="voice-card glass-panel">
+        <div class="voice-header-bar">
+          <div class="voice-status-indicator" id="voiceStatusIndicator">
+            <span class="status-pulse-dot"></span>
+            <span id="voiceStatusText">Microphone Ready</span>
+          </div>
+          <div class="recording-timer" id="recordingTimer">00:00</div>
+        </div>
+
+        <!-- Live Waveform Canvas -->
+        <div class="waveform-container">
+          <canvas id="waveformCanvas" width="800" height="130"></canvas>
+          <div class="waveform-overlay" id="waveformOverlay">
+            <i class="fa-solid fa-microphone-slash"></i>
+            <span>Click "Start Recording" or Speak to activate visualizer</span>
+          </div>
+        </div>
+
+        <!-- Recording Controls -->
+        <div class="voice-controls">
+          <button id="startRecordBtn" class="btn btn-primary btn-record">
+            <i class="fa-solid fa-microphone"></i>
+            <span>Start Recording</span>
+          </button>
+          
+          <button id="stopRecordBtn" class="btn btn-danger" disabled>
+            <i class="fa-solid fa-stop"></i>
+            <span>Stop Recording</span>
+          </button>
+
+          <button id="playAudioBtn" class="btn btn-secondary" disabled>
+            <i class="fa-solid fa-play"></i>
+            <span>Play Audio</span>
+          </button>
+
+          <button id="deleteAudioBtn" class="btn btn-outline" disabled title="Discard recording">
+            <i class="fa-solid fa-trash-can"></i>
+            <span>Discard</span>
+          </button>
+        </div>
+
+        <audio id="audioPlayback" class="hidden-audio" controls></audio>
+
+        <!-- Speech To Text Output Container -->
+        <div class="transcript-box">
+          <div class="transcript-header">
+            <div class="transcript-title">
+              <i class="fa-solid fa-comment-dots"></i>
+              <span>Detected Speech Transcript</span>
+            </div>
+            <div class="transcript-actions">
+              <span class="transcript-mode-badge" id="speechEngineBadge">Web Speech API</span>
+              <button id="clearTranscriptBtn" class="btn-link" title="Clear text"><i class="fa-solid fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <textarea id="voiceTranscriptText" class="transcript-textarea" placeholder="Your spoken words will appear here in real-time as you talk, or you can adjust them before analysis..." rows="4"></textarea>
+          
+          <div class="transcript-footer">
+            <small class="hint-text"><i class="fa-solid fa-circle-info"></i> Tip: You can edit or add more details in the box above before analyzing.</small>
+            <button id="analyzeVoiceBtn" class="btn btn-accent" disabled>
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Analyze Voice Emotion</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TEXT ANALYSIS SECTION ==================== -->
+    <section class="section" id="textSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-pen-fancy"></i> Natural Language Sentiment</div>
+        <h2 class="section-title">Text Mood Analysis</h2>
+        <p class="section-desc">Type freely about your day, study workload, fears, or how you feel right now. The AI NLP parser evaluates emotional keywords and stress indicators.</p>
+      </div>
+
+      <div class="text-card glass-panel">
+        <!-- Quick Sample Prompts -->
+        <div class="prompt-chips-container">
+          <span class="chips-label"><i class="fa-solid fa-bolt"></i> Quick Prompts:</span>
+          <div class="chips-list">
+            <button class="prompt-chip" data-prompt="I have a huge calculus midterm tomorrow morning and I feel completely overwhelmed and stressed out.">😰 Exam Overwhelmed</button>
+            <button class="prompt-chip" data-prompt="I am super exhausted after 6 hours of studying and I can barely keep my eyes open.">😴 Exhausted & Tired</button>
+            <button class="prompt-chip" data-prompt="I'm really excited! Just finished my project report and ready to conquer the next chapters.">😊 Energized & Ready</button>
+            <button class="prompt-chip" data-prompt="I feel peaceful today, listening to lo-fi music and reviewing my chemistry flashcards smoothly.">😌 Calm & Focused</button>
+            <button class="prompt-chip" data-prompt="I studied so hard for the physics quiz but still got a low score. Feeling really discouraged and sad.">😔 Discouraged / Sad</button>
+            <button class="prompt-chip" data-prompt="I'm so furious with this group project partner who didn't submit their part on deadline!">😡 Frustrated / Angry</button>
+          </div>
+        </div>
+
+        <div class="textarea-wrapper">
+          <textarea 
+            id="textInput" 
+            class="mood-textarea" 
+            placeholder="Tell me how you are feeling or what is bothering you (e.g. 'I have an exam in 2 days and I feel anxious about remembering formulas')..." 
+            rows="5"
+          ></textarea>
+          
+          <div class="textarea-stats">
+            <span id="charCount">0 characters</span>
+            <span id="wordCount">0 words</span>
+          </div>
+        </div>
+
+        <div class="text-action-bar">
+          <button id="clearTextInputBtn" class="btn btn-outline">
+            <i class="fa-solid fa-rotate-left"></i> Reset
+          </button>
+          <button id="analyzeTextBtn" class="btn btn-primary">
+            <i class="fa-solid fa-brain"></i>
+            <span>Analyze Mood</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ANALYSIS LOADING MODAL/OVERLAY ==================== -->
+    <div id="aiLoadingOverlay" class="ai-loading-overlay hidden">
+      <div class="loading-card glass-panel">
+        <div class="loading-spinner-wrap">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring-inner"></div>
+          <i class="fa-solid fa-brain-circuit spinner-icon"></i>
+        </div>
+        <h3 class="loading-title">AI Neural Engine Analyzing...</h3>
+        <p class="loading-subtitle" id="loadingDynamicMsg">Extracting emotional valence and academic stress patterns...</p>
+        <div class="loading-bar">
+          <div class="loading-progress" id="loadingProgressBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MOOD RESULT & STUDY SUGGESTIONS SECTION ==================== -->
+    <section class="section" id="resultSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-chart-pie"></i> Diagnostic Breakdown</div>
+        <h2 class="section-title">Mood & Emotion Diagnostics</h2>
+        <p class="section-desc">Comprehensive AI emotional report with confidence score, detected linguistic patterns, and personalized study protocols.</p>
+      </div>
+
+      <div class="results-grid">
+        <!-- Main Mood Result Card -->
+        <div class="mood-result-card glass-panel" id="moodResultCard">
+          <div class="card-glow-edge"></div>
+          
+          <div class="result-header">
+            <div class="result-label">Your Current Estimated Mood</div>
+            <span class="live-tag"><i class="fa-solid fa-circle"></i> Analyzed</span>
+          </div>
+
+          <div class="mood-hero-display">
+            <div class="mood-emoji-bubble" id="resultMoodEmoji">
+              <span>😊</span>
+            </div>
+            <div class="mood-details">
+              <h3 class="mood-name" id="resultMoodName">Calm & Focused</h3>
+              <p class="mood-subtitle" id="resultMoodDescriptor">Receptive state for deep work and analytical tasks</p>
+            </div>
+          </div>
+
+          <!-- Circular Confidence Progress & Metrics -->
+          <div class="metrics-row">
+            <div class="confidence-circle-wrap">
+              <svg class="circular-chart" viewBox="0 0 36 36">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="circle" id="confidenceCircleProgress" stroke-dasharray="87, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.35" class="percentage" id="resultConfidenceText">87%</text>
+              </svg>
+              <span class="confidence-label">AI Confidence</span>
+            </div>
+
+            <div class="sub-metrics">
+              <div class="sub-metric-item">
+                <span class="sub-metric-label">Valence / Positivity</span>
+                <div class="metric-bar-wrap">
+                  <div class="metric-fill-bar" id="valenceBar" style="width: 75%;"></div>
+                </div>
+                <span class="metric-val" id="valenceVal">+0.62</span>
+              </div>
+              <div class="sub-metric-item">
+                <span class="sub-metric-label">Stress / Overload</span>
+                <div class="metric-bar-wrap">
+                  <div class="metric-fill-bar bar-stress" id="stressBar" style="width: 25%;"></div>
+                </div>
+                <span class="metric-val" id="stressVal">Low (25%)</span>
+              </div>
+              <div class="sub-metric-item">
+                <span class="sub-metric-label">Energy Level</span>
+                <div class="metric-bar-wrap">
+                  <div class="metric-fill-bar bar-energy" id="energyBar" style="width: 80%;"></div>
+                </div>
+                <span class="metric-val" id="energyVal">Balanced (80%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- What the AI Noticed -->
+          <div class="ai-observations-box">
+            <div class="obs-title">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>What the AI Noticed</span>
+            </div>
+            <p class="obs-text" id="aiNoticedText">
+              "Your speech and text express steady focus, constructive optimism, and a low level of cognitive friction. Excellent state for deep retention."
+            </p>
+            <div class="obs-tags" id="detectedKeywordsTags">
+              <span class="keyword-tag">#focused</span>
+              <span class="keyword-tag">#organized</span>
+              <span class="keyword-tag">#moderate-pace</span>
+            </div>
+          </div>
+
+          <!-- Disclaimer Notice -->
+          <div class="disclaimer-banner">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span><strong>AI Disclaimer:</strong> Emotion analysis is an algorithmic estimate intended for academic guidance & wellness, not a clinical diagnosis.</span>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-outline" id="saveMoodLogBtn">
+              <i class="fa-solid fa-bookmark"></i> Save to Mood History
+            </button>
+            <a href="#chatbotSection" class="btn btn-secondary" id="discussMoodChatBtn">
+              <i class="fa-solid fa-comments"></i> Discuss with AI Assistant
+            </a>
+          </div>
+        </div>
+
+        <!-- Personalized Study Suggestions Card -->
+        <div class="study-suggestions-card glass-panel" id="studySuggestionsCard">
+          <div class="card-glow-edge accent-glow"></div>
+          
+          <div class="suggestion-header">
+            <div class="header-left">
+              <span class="suggestion-pill" id="suggestionMoodTag"><i class="fa-solid fa-lightbulb"></i> Adaptive Protocol</span>
+              <h3 class="suggestion-title" id="suggestionHeading">Study Plan for Focused State</h3>
+            </div>
+            <button class="btn-icon" id="refreshSuggestionsBtn" title="Regenerate suggestions">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+          </div>
+
+          <p class="suggestion-intro" id="suggestionIntro">
+            Based on your detected emotional profile, here is your customized high-efficiency study blueprint:
+          </p>
+
+          <!-- Dynamic Action Checklist -->
+          <div class="recommendations-list" id="recommendationsList">
+            <!-- Populated dynamically via JS -->
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="suggestion-footer-actions">
+            <button id="applyTimerPresetBtn" class="btn btn-primary">
+              <i class="fa-solid fa-stopwatch"></i>
+              <span id="applyTimerBtnText">Start 25m Focus Block</span>
+            </button>
+            
+            <a href="#breathingSection" class="btn btn-outline" id="openBreatheBtn">
+              <i class="fa-solid fa-wind"></i> 2-Min Reset
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== AI STUDY ASSISTANT (CHATBOT) ==================== -->
+    <section class="section" id="chatbotSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-robot"></i> 24/7 Intelligent Tutor</div>
+        <h2 class="section-title">Talk to your Study Assistant</h2>
+        <p class="section-desc">Ask for exam tactics, custom revision timetables, motivation, or guidance tailored to your current emotional state.</p>
+      </div>
+
+      <div class="chat-wrapper glass-panel">
+        <div class="chat-header">
+          <div class="chat-bot-info">
+            <div class="chat-avatar">
+              <i class="fa-solid fa-brain"></i>
+              <span class="online-indicator"></span>
+            </div>
+            <div>
+              <h4 class="chat-bot-name">MindStudy AI Tutor</h4>
+              <small class="chat-bot-status" id="chatBotMoodSync"><i class="fa-solid fa-link"></i> Synced with your mood: Calm</small>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <button id="speakLastMsgBtn" class="btn-icon" title="Listen to AI's last answer" aria-label="Text to speech">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+            <button id="clearChatBtn" class="btn-icon" title="Clear conversation" aria-label="Clear chat">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Quick Suggestion Chips -->
+        <div class="chat-chips-bar">
+          <button class="chat-chip" data-msg="I feel stressed about my exam."><i class="fa-solid fa-triangle-exclamation"></i> Stressed about exam</button>
+          <button class="chat-chip" data-msg="How should I prepare for tomorrow's exam?"><i class="fa-solid fa-bullseye"></i> Tomorrow's exam prep</button>
+          <button class="chat-chip" data-msg="Give me a 2-hour study plan for high focus."><i class="fa-solid fa-calendar-days"></i> 2-Hour study plan</button>
+          <button class="chat-chip" data-msg="I can't concentrate and keep getting distracted."><i class="fa-solid fa-compass"></i> Can't concentrate</button>
+          <button class="chat-chip" data-msg="Explain the Feynman Technique in simple terms."><i class="fa-solid fa-graduation-cap"></i> Feynman Technique</button>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+          <!-- Initial AI Welcome Message -->
+          <div class="chat-message bot-message">
+            <div class="msg-avatar"><i class="fa-solid fa-brain"></i></div>
+            <div class="msg-content">
+              <p>Hello! I'm your <strong>AI Study Assistant</strong>. I can help organize your study sessions, break down complex topics, calm exam stress, or create smart revision schedules.</p>
+              <p>How are you feeling right now, and what are you studying today?</p>
+              <span class="msg-time" id="initialMsgTime">Just now</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form class="chat-input-area" id="chatForm">
+          <input 
+            type="text" 
+            id="chatInput" 
+            class="chat-input" 
+            placeholder="Type your question or concern (e.g. 'I have 3 chapters left and 4 hours')..." 
+            autocomplete="off"
+            required
+          >
+          <button type="button" id="chatVoiceInputBtn" class="btn-icon" title="Voice input to chat" aria-label="Voice input">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+          <button type="submit" class="btn btn-primary btn-send" id="chatSendBtn">
+            <span>Send</span>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== MOOD DASHBOARD & HISTORY ==================== -->
+    <section class="section" id="dashboardSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-chart-line"></i> Analytics & Insights</div>
+        <h2 class="section-title">Mood & Study Dashboard</h2>
+        <p class="section-desc">Track your emotional fluctuations across days, identify stress patterns, and review past recommendations.</p>
+      </div>
+
+      <!-- Dashboard Stats Row -->
+      <div class="dashboard-stats-grid">
+        <div class="dash-stat-card glass-panel">
+          <div class="dash-icon icon-purple"><i class="fa-solid fa-calendar-check"></i></div>
+          <div class="dash-stat-body">
+            <span class="dash-stat-label">Total Check-Ins</span>
+            <h3 class="dash-stat-value" id="dashTotalCheckins">5</h3>
+            <span class="dash-trend trend-up"><i class="fa-solid fa-arrow-trend-up"></i> Active Habit</span>
+          </div>
+        </div>
+
+        <div class="dash-stat-card glass-panel">
+          <div class="dash-icon icon-pink"><i class="fa-solid fa-crown"></i></div>
+          <div class="dash-stat-body">
+            <span class="dash-stat-label">Dominant Mood</span>
+            <h3 class="dash-stat-value" id="dashDominantMood">Calm (40%)</h3>
+            <span class="dash-trend trend-neutral"><i class="fa-solid fa-equals"></i> Steady Base</span>
+          </div>
+        </div>
+
+        <div class="dash-stat-card glass-panel">
+          <div class="dash-icon icon-cyan"><i class="fa-solid fa-bullseye"></i></div>
+          <div class="dash-stat-body">
+            <span class="dash-stat-label">Avg AI Confidence</span>
+            <h3 class="dash-stat-value" id="dashAvgConfidence">86.4%</h3>
+            <span class="dash-trend trend-up"><i class="fa-solid fa-check"></i> High Accuracy</span>
+          </div>
+        </div>
+
+        <div class="dash-stat-card glass-panel">
+          <div class="dash-icon icon-amber"><i class="fa-solid fa-stopwatch"></i></div>
+          <div class="dash-stat-body">
+            <span class="dash-stat-label">Pomodoros Done</span>
+            <h3 class="dash-stat-value" id="dashPomodorosDone">6</h3>
+            <span class="dash-trend trend-up"><i class="fa-solid fa-fire"></i> 150 Mins Focused</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-grid">
+        <!-- 7-Day Mood Trend Chart -->
+        <div class="chart-card glass-panel">
+          <div class="chart-card-header">
+            <div class="chart-title">
+              <i class="fa-solid fa-chart-area"></i>
+              <span>7-Day Mood & Stress Trend</span>
+            </div>
+            <span class="chart-tag">Weekly Timeline</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="weeklyMoodChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Mood Frequency Doughnut Chart -->
+        <div class="chart-card glass-panel">
+          <div class="chart-card-header">
+            <div class="chart-title">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>Mood Distribution</span>
+            </div>
+            <span class="chart-tag">Frequency</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="moodDistributionChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Table / Log -->
+      <div class="history-table-card glass-panel">
+        <div class="table-header">
+          <div class="table-title">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Mood Check-in History Log</span>
+          </div>
+          <div class="table-actions">
+            <button id="exportHistoryBtn" class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-download"></i> Export Data
+            </button>
+            <button id="addSampleHistoryBtn" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-plus"></i> Load Demo Week
+            </button>
+            <button id="clearHistoryBtn" class="btn btn-danger btn-sm">
+              <i class="fa-solid fa-trash-can"></i> Clear Log
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="history-table" id="historyTable">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Input Method</th>
+                <th>Detected Mood</th>
+                <th>Confidence</th>
+                <th>Key Trigger / Summary</th>
+                <th>Suggested Action</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Rendered via JS from LocalStorage -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== POMODORO STUDY TIMER ==================== -->
+    <section class="section" id="timerSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-stopwatch"></i> Focus Acceleration</div>
+        <h2 class="section-title">Pomodoro Study Timer</h2>
+        <p class="section-desc">Interval training for your brain. Pair your current mental state with the optimal study & recovery rhythm.</p>
+      </div>
+
+      <div class="timer-card glass-panel">
+        <!-- Timer Mode Selector -->
+        <div class="timer-mode-pills">
+          <button class="timer-mode-btn active" data-mode="pomodoro" data-time="1500">
+            <i class="fa-solid fa-brain"></i> Study Focus (25m)
+          </button>
+          <button class="timer-mode-btn" data-mode="shortBreak" data-time="300">
+            <i class="fa-solid fa-mug-hot"></i> Short Break (5m)
+          </button>
+          <button class="timer-mode-btn" data-mode="longBreak" data-time="900">
+            <i class="fa-solid fa-couch"></i> Long Break (15m)
+          </button>
+          <button class="timer-mode-btn" data-mode="deepWork" data-time="3000">
+            <i class="fa-solid fa-fire"></i> Deep Block (50m)
+          </button>
+        </div>
+
+        <!-- Circular Timer Ring -->
+        <div class="timer-display-wrap">
+          <svg class="timer-svg" viewBox="0 0 280 280">
+            <defs>
+              <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ec4899" />
+                <stop offset="50%" stop-color="#8b5cf6" />
+                <stop offset="100%" stop-color="#06b6d4" />
+              </linearGradient>
+            </defs>
+            <circle class="timer-circle-bg" cx="140" cy="140" r="120"></circle>
+            <circle class="timer-circle-progress" id="timerCircleProgress" cx="140" cy="140" r="120"></circle>
+          </svg>
+
+          <div class="timer-time-inner">
+            <span class="timer-mode-label" id="timerModeLabel">Focus Mode</span>
+            <h2 class="timer-digits" id="timerDigits">25:00</h2>
+            <span class="timer-task-label" id="timerTaskLabel">Topic: Active Study</span>
+          </div>
+        </div>
+
+        <!-- Timer Controls -->
+        <div class="timer-controls">
+          <button id="timerStartBtn" class="btn btn-primary btn-timer-main">
+            <i class="fa-solid fa-play"></i>
+            <span>Start Focus</span>
+          </button>
+          <button id="timerPauseBtn" class="btn btn-secondary" disabled>
+            <i class="fa-solid fa-pause"></i>
+            <span>Pause</span>
+          </button>
+          <button id="timerResetBtn" class="btn btn-outline">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Ambient Focus Audio Generator (Web Audio API) -->
+        <div class="ambient-audio-bar">
+          <div class="audio-label">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Synthesized Background Soundscape:</span>
+          </div>
+          <div class="sound-presets">
+            <button class="sound-chip active" data-sound="none"><i class="fa-solid fa-volume-xmark"></i> Mute</button>
+            <button class="sound-chip" data-sound="binaural"><i class="fa-solid fa-wave-square"></i> 40Hz Alpha Wave</button>
+            <button class="sound-chip" data-sound="rain"><i class="fa-solid fa-cloud-rain"></i> Pink Rain Noise</button>
+            <button class="sound-chip" data-sound="space"><i class="fa-solid fa-shuttle-space"></i> Cosmic Drone</button>
+          </div>
+        </div>
+
+        <div class="timer-footer-stats">
+          <span><i class="fa-solid fa-circle-check"></i> Completed Today: <strong id="completedSessionsCount">0</strong></span>
+          <span><i class="fa-solid fa-bell"></i> Audio Bell: <strong>Web Audio Synthesizer Active</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4-7-8 GUIDED BREATHING BREAK ==================== -->
+    <section class="section" id="breathingSection">
+      <div class="section-header">
+        <div class="section-badge"><i class="fa-solid fa-wind"></i> Parasympathetic Activation</div>
+        <h2 class="section-title">Guided 4-7-8 Calming Breath</h2>
+        <p class="section-desc">Whenever anxiety, exam fear, or mental fatigue strikes, follow this proven respiratory rhythm to reset your nervous system.</p>
+      </div>
+
+      <div class="breathing-card glass-panel">
+        <div class="breath-visualizer-wrap">
+          <div class="breath-circle" id="breathCircle">
+            <div class="breath-inner-core">
+              <span class="breath-instruction" id="breathInstruction">Ready</span>
+              <span class="breath-countdown" id="breathCountdown">4</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="breath-guide-steps">
+          <div class="breath-step active" id="stepInhale">
+            <span class="step-num">1</span>
+            <strong>Inhale</strong>
+            <small>4 Seconds (Nose)</small>
+          </div>
+          <div class="breath-step" id="stepHold">
+            <span class="step-num">2</span>
+            <strong>Hold</strong>
+            <small>7 Seconds (Still)</small>
+          </div>
+          <div class="breath-step" id="stepExhale">
+            <span class="step-num">3</span>
+            <strong>Exhale</strong>
+            <small>8 Seconds (Mouth)</small>
+          </div>
+        </div>
+
+        <div class="breath-controls">
+          <button id="startBreathBtn" class="btn btn-primary">
+            <i class="fa-solid fa-play"></i> Start 2-Minute Breathing Session
+          </button>
+          <button id="stopBreathBtn" class="btn btn-outline" disabled>
+            <i class="fa-solid fa-stop"></i> Stop
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-brain-circuit logo-icon"></i>
+          <span class="logo-title">MindStudy<span class="accent-text">.AI</span></span>
+        </div>
+        <p class="footer-desc">
+          AI-based Student Voice Mood & Study Assistant. Combining speech recognition, natural language emotion detection, and cognitive study strategies for holistic student success.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag"><i class="fa-solid fa-code"></i> Web Speech API</span>
+          <span class="tech-tag"><i class="fa-solid fa-wave-square"></i> Web Audio API</span>
+          <span class="tech-tag"><i class="fa-solid fa-chart-pie"></i> Chart.js</span>
+          <span class="tech-tag"><i class="fa-solid fa-database"></i> LocalStorage</span>
+          <span class="tech-tag"><i class="fa-brands fa-js"></i> Pure Vanilla JS</span>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Application Modules</h4>
+        <ul>
+          <li><a href="#voiceSection"><i class="fa-solid fa-chevron-right"></i> Voice Emotion Engine</a></li>
+          <li><a href="#textSection"><i class="fa-solid fa-chevron-right"></i> Text NLP Analysis</a></li>
+          <li><a href="#resultSection"><i class="fa-solid fa-chevron-right"></i> Diagnostic Report</a></li>
+          <li><a href="#chatbotSection"><i class="fa-solid fa-chevron-right"></i> AI Study Chatbot</a></li>
+          <li><a href="#dashboardSection"><i class="fa-solid fa-chevron-right"></i> Mood & Stress Trends</a></li>
+          <li><a href="#timerSection"><i class="fa-solid fa-chevron-right"></i> Pomodoro Engine</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-shortcuts">
+        <h4>Keyboard Shortcuts</h4>
+        <ul class="shortcut-list">
+          <li><kbd>Alt</kbd> + <kbd>V</kbd> <span>Voice Analysis</span></li>
+          <li><kbd>Alt</kbd> + <kbd>T</kbd> <span>Text Analysis</span></li>
+          <li><kbd>Alt</kbd> + <kbd>C</kbd> <span>AI Chatbot</span></li>
+          <li><kbd>Alt</kbd> + <kbd>P</kbd> <span>Pomodoro Timer</span></li>
+          <li><kbd>Alt</kbd> + <kbd>B</kbd> <span>Breathing Break</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>© 2026 Student Voice Mood & Study Assistant | Academic AI / ML College Demonstration Project</p>
+        <p class="disclaimer-mini">For academic and educational assistance only. No audio or personal data is transmitted to external servers.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
